@@ -1,5 +1,6 @@
 import React from 'react';
 import { DataGrid,GridToolbar } from '@mui/x-data-grid';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 
 
 
@@ -20,7 +21,9 @@ const GridBase = (prop) => {
   paginationModel,
   onPaginationModelChange,
   onRowSelectionModelChange,
-  rowSelectionModel
+  rowSelectionModel,
+  pinnedColumns,
+  onPinnedColumnsChange
     } = prop;
 
 
@@ -28,7 +31,7 @@ const GridBase = (prop) => {
   
   return (
     <div className="h-[500px] w-5/5 mt-7">
-      <DataGrid
+      <DataGridPro
         rows={rows}
         columns={columns}
         slots={{
@@ -50,6 +53,8 @@ const GridBase = (prop) => {
         disableRowSelectionOnClick
         onRowSelectionModelChange={onRowSelectionModelChange}
         rowSelectionModel={rowSelectionModel}
+        pinnedColumns={pinnedColumns}
+        onPinnedColumnsChange={onPinnedColumnsChange}
 
       />
     </div>

@@ -8,6 +8,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import request from "../Requests/Requests";
 import apis from "../Requests/apis";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 const defaultFilter = { page: 0, pageSize: 10 };
 
 const Employee = () => {
@@ -16,6 +17,13 @@ const Employee = () => {
   const [rowCount, setRowCount] = useState(null);
   const [isShowLoader, setIsShowLoader] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [pinnedColumns, setPinnedColumns] = React.useState({
+    right: ['actions'],
+  });
+
+  const handlePinnedColumnsChange = React.useCallback((updatedPinnedColumns) => {
+    setPinnedColumns(updatedPinnedColumns);
+  }, []);
 
   const fetchData = useCallback(async () => {
     try {
@@ -55,7 +63,7 @@ const Employee = () => {
       text: "Are you sure you want to delete this row?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete",
+      confirmButtonText: "Yes, delete", 
       cancelButtonText: "No, cancel",
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -136,38 +144,44 @@ const Employee = () => {
       field: "PhoneNumber",
       headerName: "PhoneNumber",
       type: "number",
-      width: 90,
+      width: 120,
     },
     {
       field: "fullName",
       headerName: "Full name",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
-      width: 160,
+      width: 140,
       valueGetter: (params) =>
-        `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+        `${params.row.FirstName || ""} ${params.row.LastName || ""}`,
+    },
+    {
+      field: "BirthDate",
+      headerName: "Birth Date",
+      type: "Date",
+      width: 130,
     },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
-      width: 150,
+      width: 130,
       renderCell: (params) => (
-        <div className="flex justify-between">
-          <button onClick={handleEdit} className="text-sky-600">
+        <div className="flex justify-between space-x-3">
+          <button onClick={handleEdit} className="text-gray-500">
             <EditIcon />
           </button>
           <button
             onClick={() => handleDelete(params.row.id)}
-            className="text-red-600"
+            className="text-gray-500"
           >
             <DeleteIcon />
           </button>
 
-          <button onClick={handleCopy} className="text-black-600">
+          <button onClick={handleCopy} className="text-gray-500">
             <FileCopyIcon />
           </button>
-        </div>
+        </div> 
       ),
     },
   ];
@@ -182,7 +196,9 @@ const Employee = () => {
 
   <div>
     <Button variant="outlined" endIcon={<AddIcon />}>
+      <Link to='/create'>
       Create
+      </Link>
     </Button>
   </div>
 </div>
@@ -208,6 +224,8 @@ const Employee = () => {
         autoHeight={true}
         showTitleColumn={true}
         rowCount={rowCount}
+        pinnedColumns={pinnedColumns}
+        onPinnedColumnsChange={handlePinnedColumnsChange}
       />
     </div>
   );
